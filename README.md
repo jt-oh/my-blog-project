@@ -42,7 +42,7 @@ This project only contains server-side APIs.
 ### Create Post (Actor: Logined User)
 
 1. Sign in with credentials
-1. Move to a Post Createion Page
+1. Move to a Post Creation Page
 1. Write 'title', 'content'
 1. Add Tags
 1. Create Post
@@ -88,3 +88,66 @@ This project only contains server-side APIs.
 1. Sign in with credentials
 1. Move to a Post
 1. Delete the Comment
+
+## EndPoints
+
+### Post Service
+
+1. POST '/api/v1/posts'
+  Request Body
+    - title : Required String
+    - content : Required String
+    - tags : Optional Array of String
+
+1. GET '/api/v1/posts'
+  Query Parameter
+    - page_index : int = 1
+    - page_size : int = 10
+    - search_by : String
+
+1. GET '/api/v1/posts/{post_id}'
+1. PUT '/api/v1/posts/{post_id}'
+  Request Body
+    - title : Required String
+    - content : Required String
+    - tags : Optional Array of String
+
+1. DELETE '/api/v1/posts/{post_id}'
+1. GET '/api/v1/users/{user_id}/posts'
+  Query Parameter
+    - page_index : int = 1
+    - page_size : int = 10
+    - search_by : String
+
+### User Service
+
+1. POST '/users/register'
+  Request Body
+    - login_id : Required String
+    - eamil : Required String
+    - password : Required String
+    - name : Required String
+
+1. POST '/users/login'
+  Request Body
+    - login_id : Required String
+    - password : Required String
+
+1. POST '/users/logout'
+
+### Comment Service
+
+1. POST '/api/v1/posts/{post_id}/comments'
+  Request Body
+    - content
+
+1. GET '/api/v1/posts/{post_id}/comments'
+  Query Paramter
+    - page_index : int = 1
+    - page_size : int = 10
+
+1. PUT '/api/v1/comments/{comments_id}'
+  Request Body
+    - content
+
+1. DELETE '/api/v1/comments/{comments_id}'
