@@ -6,7 +6,6 @@ import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.application.dto.UpdatePostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostPresentor;
-import com.my_blog.demo.post.application.outbound_ports.PostPresentorDto;
 import com.my_blog.demo.post.application.outbound_ports.Posts;
 
 public class PostServiceImpl implements PostService {
@@ -37,7 +36,7 @@ public class PostServiceImpl implements PostService {
     /**
      * 
      */
-    public PostPresentorDto createPost(CreatePostDto createPostDto) {
+    public void createPost(CreatePostDto createPostDto) {
 
         PostDto postDto = PostDto.builder()
             .id(counter.incrementAndGet())
@@ -46,22 +45,24 @@ public class PostServiceImpl implements PostService {
             .authorId(1L)
             .build();
 
-        return postPresentor.toPresentorDto(postDto);
+        postPresentor.show(postDto);
     }
 
 
-    public PostPresentorDto getPostById(long postId) {
+
+    public void getPostById(long postId) {
 
 
-        return postPresentor.toPresentorDto(new PostDto());
+        postPresentor.show(new PostDto());
     }
 
 
-    public PostPresentorDto updatePost(UpdatePostDto updatePostDto) {
+    public void updatePost(UpdatePostDto updatePostDto) {
 
-        return postPresentor.toPresentorDto(new PostDto());
+        postPresentor.show(new PostDto());
     }
 
+    
     public long deletePostById(long postId) {
 
         return postId;

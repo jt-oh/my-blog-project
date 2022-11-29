@@ -10,25 +10,27 @@ import com.my_blog.demo.post.application.PostServiceImpl;
 import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.database.MySqlPostsRepository;
 import com.my_blog.demo.post.dto.CreatePostRestRequest;
-import com.my_blog.demo.post.dto.CreatePostRestResponse;
 import com.my_blog.demo.post.dto.PostRestDto;
 
 @RestController
 public class PostRestController {
 
     @PostMapping(path="/posts")
-    public CreatePostRestResponse createPost(@RequestBody CreatePostRestRequest createPostRestRequest) {
+    public PostRestDto createPost(@RequestBody CreatePostRestRequest createPostRestRequest) {
         MySqlPostsRepository mySqlPostsRepository = new MySqlPostsRepository();
 
         PostRestPresentor postRestPresentor = new PostRestPresentor();
 
-        PostService<PostRestDto> postService = new PostServiceImpl<PostRestDto>(
+        PostService postService = new PostServiceImpl(
             mySqlPostsRepository,
             postRestPresentor
         );
 
         CreatePostDto createPostDto = createPostRestRequest.toCreatePostDto();
 
-        return new CreatePostRestResponse(postService.createPost(createPostDto));
+        postService.createPost(createPostDto);
+
+        return postRestPresentor.getPostResponse();
+    }
     }
 }
