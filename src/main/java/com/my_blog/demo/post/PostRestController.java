@@ -2,7 +2,8 @@ package com.my_blog.demo.post;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-// import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.my_blog.demo.post.application.PostService;
@@ -13,9 +14,10 @@ import com.my_blog.demo.post.dto.CreatePostRestRequest;
 import com.my_blog.demo.post.dto.PostRestDto;
 
 @RestController
+@RequestMapping(path="/api/v1/posts")
 public class PostRestController {
 
-    @PostMapping(path="/posts")
+    @PostMapping
     public PostRestDto createPost(@RequestBody CreatePostRestRequest createPostRestRequest) {
         MySqlPostsRepository mySqlPostsRepository = new MySqlPostsRepository();
 
