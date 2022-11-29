@@ -1,8 +1,10 @@
 package com.my_blog.demo.post.application;
 
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.my_blog.demo.post.application.dto.CreatePostDto;
+import com.my_blog.demo.post.application.dto.GetPostsIndexRequest;
 import com.my_blog.demo.post.application.dto.UpdatePostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostPresentor;
@@ -48,6 +50,23 @@ public class PostServiceImpl implements PostService {
         postPresentor.show(postDto);
     }
 
+
+    public void getPostsIndex(GetPostsIndexRequest getPostsIndexRequest) {
+        List<PostDto> posts = new ArrayList<PostDto>();
+
+        for (int i = 0; i < 5; i++) {
+            PostDto post = PostDto.builder()
+                .id(i)
+                .title(String.valueOf(i) + " Title")
+                .content(String.valueOf(i) + " Content")
+                .authorId(1L)
+                .build();
+
+            posts.add(post);
+        }
+
+        postPresentor.show(posts);
+    }
 
 
     public void getPostById(long postId) {

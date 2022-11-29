@@ -1,5 +1,9 @@
 package com.my_blog.demo.post;
 
+import java.util.List;
+
+import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.my_blog.demo.post.application.PostService;
 import com.my_blog.demo.post.application.PostServiceImpl;
 import com.my_blog.demo.post.application.dto.CreatePostDto;
+import com.my_blog.demo.post.application.dto.GetPostsIndexRequest;
 import com.my_blog.demo.post.database.MySqlPostsRepository;
 import com.my_blog.demo.post.dto.CreatePostRestRequest;
 import com.my_blog.demo.post.dto.PostRestDto;
@@ -34,5 +39,30 @@ public class PostRestController {
 
         return postRestPresentor.getPostResponse();
     }
+
+    @GetMapping
+    public List<PostRestDto> getPostIndex(
+        @RequestParam("page_size") Optional<Integer> pageSize,
+        @RequestParam("page_index") Optional<Integer> pageIndex,
+        @RequestParam("search_by") Optional<String> searchBy
+    ) {
+        MySqlPostsRepository mySqlPostsRepository = new MySqlPostsRepository();
+
+        PostRestPresentor postRestPresentor = new PostRestPresentor();
+
+        PostService postService = new PostServiceImpl(
+            mySqlPostsRepository,
+            postRestPresentor
+        );
+
+        GetPostsIndexRequest getPostsIndexRequest = GetPostsIndexRequest.builder()
+                                                        .pageSize(pageSize.orElse(30))
+                                                        .pageIndex(pageIndex.orElse(1))
+                                                        .searchBy(searchBy.orElse(""))
+                                                        .build();
+
+        postService.getPostsIndex(getPostsIndexRequest);
+        
+        return postRestPresentor.getPostsResponse();
     }
 }
