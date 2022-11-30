@@ -1,7 +1,6 @@
 package com.my_blog.demo.post.application;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 
 import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.application.dto.GetPostsIndexRequest;
@@ -9,11 +8,11 @@ import com.my_blog.demo.post.application.dto.UpdatePostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostPresentor;
 import com.my_blog.demo.post.application.outbound_ports.Posts;
+import com.my_blog.demo.post.domain.Post;
+import com.my_blog.demo.post.domain.value_objects.PostContent;
+import com.my_blog.demo.post.domain.value_objects.PostTitle;
 
 public class PostServiceImpl implements PostService {
-
-    private static AtomicLong counter = new AtomicLong();
-
     /**
      * Outbound Port for Post Persistency
      */
@@ -39,12 +38,19 @@ public class PostServiceImpl implements PostService {
      * 
      */
     public void createPost(CreatePostDto createPostDto) {
+        Post post = Post.builder()
+            .title(new PostTitle(createPostDto.getTitle()))
+            .content(new PostContent(createPostDto.getContent()))
+            .authorId(1L)
+            .build();
+
+        post = postsPersistency.save(post);
 
         PostDto postDto = PostDto.builder()
-            .id(counter.incrementAndGet())
-            .title(createPostDto.getTitle())
-            .content(createPostDto.getContent())
-            .authorId(1L)
+            .id(post.getPostId().getPostId())
+            .title(post.getTitle().getTitle())
+            .content(post.getContent().getContent())
+            .authorId(post.getAuthorId())
             .build();
 
         postPresentor.show(postDto);
@@ -52,20 +58,21 @@ public class PostServiceImpl implements PostService {
 
 
     public void getPostsIndex(GetPostsIndexRequest getPostsIndexRequest) {
-        List<PostDto> posts = new ArrayList<PostDto>();
+        List<Post> posts = postsPersistency.findAll();
 
-        for (int i = 0; i < 5; i++) {
-            PostDto post = PostDto.builder()
-                .id(i)
-                .title(String.valueOf(i) + " Title")
-                .content(String.valueOf(i) + " Content")
-                .authorId(1L)
+        List<PostDto> postDtos = new ArrayList<PostDto>();
+        for (Post post: posts) {
+            PostDto postDto = PostDto.builder()
+                .id(post.getPostId().getPostId())
+                .title(post.getTitle().getTitle())
+                .content(post.getContent().getContent())
+                .authorId(post.getAuthorId())
                 .build();
 
-            posts.add(post);
+            postDtos.add(postDto);
         }
 
-        postPresentor.show(posts);
+        postPresentor.show(postDtos);
     }
 
 
@@ -81,7 +88,7 @@ public class PostServiceImpl implements PostService {
         postPresentor.show(new PostDto());
     }
 
-    
+
     public long deletePostById(long postId) {
 
         return postId;
