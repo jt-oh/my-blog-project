@@ -2,11 +2,11 @@ package com.my_blog.demo.post.persistency;
 
 import java.util.*;
 
-import com.my_blog.demo.post.application.outbound_ports.Posts;
+import com.my_blog.demo.post.application.outbound_ports.PostRepository;
 import com.my_blog.demo.post.domain.Post;
 import com.my_blog.demo.post.domain.value_objects.PostId;
 
-public class MySqlPostsRepository implements Posts {
+public class MySqlPostsRepository implements PostRepository {
     public Post save(Post post) {
         return new Post();
     }

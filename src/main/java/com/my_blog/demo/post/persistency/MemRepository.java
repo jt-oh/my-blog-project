@@ -3,11 +3,11 @@ package com.my_blog.demo.post.persistency;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.my_blog.demo.post.application.outbound_ports.Posts;
+import com.my_blog.demo.post.application.outbound_ports.PostRepository;
 import com.my_blog.demo.post.domain.Post;
 import com.my_blog.demo.post.domain.value_objects.PostId;
 
-public class MemRepository implements Posts {
+public class MemRepository implements PostRepository {
     public static List<Post> memStore = new ArrayList<Post> ();
     private static AtomicLong counter = new AtomicLong();
 

@@ -14,11 +14,10 @@ import com.my_blog.demo.post.application.PostService;
 import com.my_blog.demo.post.application.PostServiceImpl;
 import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.application.dto.GetPostsIndexRequest;
-import com.my_blog.demo.post.application.outbound_ports.Posts;
+import com.my_blog.demo.post.application.outbound_ports.PostRepository;
 import com.my_blog.demo.post.dto.CreatePostRestRequest;
 import com.my_blog.demo.post.dto.PostRestDto;
 import com.my_blog.demo.post.persistency.MemRepository;
-import com.my_blog.demo.post.persistency.MySqlPostsRepository;
 
 @RestController
 @RequestMapping(path="/api/v1/posts")
@@ -26,7 +25,7 @@ public class PostRestController {
 
     @PostMapping
     public PostRestDto createPost(@RequestBody CreatePostRestRequest createPostRestRequest) {
-        Posts postRepository = new MemRepository();
+        PostRepository postRepository = new MemRepository();
 
         PostRestPresentor postRestPresentor = new PostRestPresentor();
 
@@ -48,7 +47,7 @@ public class PostRestController {
         @RequestParam("page_index") Optional<Integer> pageIndex,
         @RequestParam("search_by") Optional<String> searchBy
     ) {
-        Posts postRepository = new MemRepository();
+        PostRepository postRepository = new MemRepository();
 
         PostRestPresentor postRestPresentor = new PostRestPresentor();
 

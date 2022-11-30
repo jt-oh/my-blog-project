@@ -1,4 +1,4 @@
-package com.my_blog.demo.post.application.outbound_ports;
+package com.my_blog.demo.post.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

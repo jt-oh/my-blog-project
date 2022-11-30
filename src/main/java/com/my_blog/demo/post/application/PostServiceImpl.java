@@ -4,10 +4,10 @@ import java.util.*;
 
 import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.application.dto.GetPostsIndexRequest;
+import com.my_blog.demo.post.application.dto.PostDto;
 import com.my_blog.demo.post.application.dto.UpdatePostDto;
-import com.my_blog.demo.post.application.outbound_ports.PostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostPresentor;
-import com.my_blog.demo.post.application.outbound_ports.Posts;
+import com.my_blog.demo.post.application.outbound_ports.PostRepository;
 import com.my_blog.demo.post.domain.Post;
 import com.my_blog.demo.post.domain.value_objects.PostContent;
 import com.my_blog.demo.post.domain.value_objects.PostTitle;
@@ -16,7 +16,7 @@ public class PostServiceImpl implements PostService {
     /**
      * Outbound Port for Post Persistency
      */
-    private Posts postsPersistency;
+    private PostRepository postsPersistency;
 
     /**
      * Outbound Port for Post Presentor
@@ -29,7 +29,7 @@ public class PostServiceImpl implements PostService {
      * @param postPresentor
      */
 
-    public PostServiceImpl(Posts postsPersistency, PostPresentor postPresentor) {
+    public PostServiceImpl(PostRepository postsPersistency, PostPresentor postPresentor) {
         this.postsPersistency = postsPersistency;
         this.postPresentor = postPresentor;
     }

@@ -2,7 +2,7 @@ package com.my_blog.demo.post;
 
 import java.util.*;
 
-import com.my_blog.demo.post.application.outbound_ports.PostDto;
+import com.my_blog.demo.post.application.dto.PostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostPresentor;
 import com.my_blog.demo.post.dto.PostRestDto;
 
