@@ -14,9 +14,11 @@ import com.my_blog.demo.post.application.PostService;
 import com.my_blog.demo.post.application.PostServiceImpl;
 import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.application.dto.GetPostsIndexRequest;
-import com.my_blog.demo.post.database.MySqlPostsRepository;
+import com.my_blog.demo.post.application.outbound_ports.Posts;
 import com.my_blog.demo.post.dto.CreatePostRestRequest;
 import com.my_blog.demo.post.dto.PostRestDto;
+import com.my_blog.demo.post.persistency.MemRepository;
+import com.my_blog.demo.post.persistency.MySqlPostsRepository;
 
 @RestController
 @RequestMapping(path="/api/v1/posts")
@@ -24,12 +26,12 @@ public class PostRestController {
 
     @PostMapping
     public PostRestDto createPost(@RequestBody CreatePostRestRequest createPostRestRequest) {
-        MySqlPostsRepository mySqlPostsRepository = new MySqlPostsRepository();
+        Posts postRepository = new MemRepository();
 
         PostRestPresentor postRestPresentor = new PostRestPresentor();
 
         PostService postService = new PostServiceImpl(
-            mySqlPostsRepository,
+            postRepository,
             postRestPresentor
         );
 
@@ -46,20 +48,20 @@ public class PostRestController {
         @RequestParam("page_index") Optional<Integer> pageIndex,
         @RequestParam("search_by") Optional<String> searchBy
     ) {
-        MySqlPostsRepository mySqlPostsRepository = new MySqlPostsRepository();
+        Posts postRepository = new MemRepository();
 
         PostRestPresentor postRestPresentor = new PostRestPresentor();
 
         PostService postService = new PostServiceImpl(
-            mySqlPostsRepository,
+            postRepository,
             postRestPresentor
         );
 
         GetPostsIndexRequest getPostsIndexRequest = GetPostsIndexRequest.builder()
-                                                        .pageSize(pageSize.orElse(30))
-                                                        .pageIndex(pageIndex.orElse(1))
-                                                        .searchBy(searchBy.orElse(""))
-                                                        .build();
+            .pageSize(pageSize.orElse(30))
+            .pageIndex(pageIndex.orElse(1))
+            .searchBy(searchBy.orElse(""))
+            .build();
 
         postService.getPostsIndex(getPostsIndexRequest);
         
