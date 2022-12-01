@@ -37,7 +37,11 @@ public class MemRepository implements PostRepository {
             .findFirst()
             .orElse(null);
 
-        return Optional.ofNullable(new Post(postInStore));
+        if (postInStore == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new Post(postInStore));
     }
 
 
