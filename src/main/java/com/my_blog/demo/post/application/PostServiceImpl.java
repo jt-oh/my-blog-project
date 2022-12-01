@@ -122,7 +122,11 @@ public class PostServiceImpl implements PostService {
 
 
     public long deletePostById(long postId) {
+        PostId postIdVO = new PostId(postId);
 
-        return postId;
+        postsPersistency.find(postIdVO)
+            .orElseThrow(() -> new ResourceNotFoundException());
+        
+        return postsPersistency.deleteById(postIdVO).getPostId();
     }
 }

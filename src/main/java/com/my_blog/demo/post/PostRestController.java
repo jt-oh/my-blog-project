@@ -3,6 +3,8 @@ package com.my_blog.demo.post;
 import java.util.List;
 
 import java.util.Optional;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -103,5 +105,19 @@ public class PostRestController {
         postService.updatePost(postId, createPostDto);
 
         return postRestPresentor.getPostResponse();
+    }
+
+    @DeleteMapping("/{postId}")
+    public long deletePost(@PathVariable long postId) {
+        PostRepository postRepository = new MemRepository();
+
+        PostRestPresentor postRestPresentor = new PostRestPresentor();
+
+        PostService postService = new PostServiceImpl(
+            postRepository,
+            postRestPresentor
+        );
+
+        return postService.deletePostById(postId);
     }
 }
