@@ -97,8 +97,27 @@ public class PostServiceImpl implements PostService {
 
 
     public void updatePost(long postId, UpdatePostDto updatePostDto) {
+        PostId postIdVO = new PostId(postId);
 
-        postPresentor.show(new PostDto());
+        Post existPost = postsPersistency.find(postIdVO)
+            .orElseThrow(() -> new ResourceNotFoundException());
+
+        PostTitle newPostTitle = new PostTitle(updatePostDto.getTitle());
+        PostContent newPostContent = new PostContent(updatePostDto.getContent());
+
+        existPost.setTitle(newPostTitle);
+        existPost.setContent(newPostContent);
+
+        Post updatedPost = postsPersistency.save(existPost);
+
+        PostDto postDto = PostDto.builder()
+            .id(updatedPost.getPostId().getPostId())
+            .title(updatedPost.getTitle().getTitle())
+            .content(updatedPost.getContent().getContent())
+            .authorId(updatedPost.getAuthorId())
+            .build();
+
+        postPresentor.show(postDto);
     }
 
 

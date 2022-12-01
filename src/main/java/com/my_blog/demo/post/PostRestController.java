@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,9 +16,11 @@ import com.my_blog.demo.post.application.PostService;
 import com.my_blog.demo.post.application.PostServiceImpl;
 import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.application.dto.GetPostsIndexRequest;
+import com.my_blog.demo.post.application.dto.UpdatePostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostRepository;
 import com.my_blog.demo.post.dto.CreatePostRestRequest;
 import com.my_blog.demo.post.dto.PostRestDto;
+import com.my_blog.demo.post.dto.UpdatePostRestRequest;
 import com.my_blog.demo.post.persistency.MemRepository;
 
 @RestController
@@ -82,5 +85,23 @@ public class PostRestController {
         postService.getPostsIndex(getPostsIndexRequest);
         
         return postRestPresentor.getPostsResponse();
+    }
+
+    @PutMapping("/{postId}")
+    public PostRestDto updatePost(@PathVariable long postId, @RequestBody UpdatePostRestRequest updatePostRestRequest) {
+        PostRepository postRepository = new MemRepository();
+
+        PostRestPresentor postRestPresentor = new PostRestPresentor();
+
+        PostService postService = new PostServiceImpl(
+            postRepository,
+            postRestPresentor
+        );
+
+        UpdatePostDto createPostDto = updatePostRestRequest.toUpdatePostDto();
+
+        postService.updatePost(postId, createPostDto);
+
+        return postRestPresentor.getPostResponse();
     }
 }
