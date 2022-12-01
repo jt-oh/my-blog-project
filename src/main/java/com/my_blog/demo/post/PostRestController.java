@@ -4,6 +4,7 @@ import java.util.List;
 
 import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,22 @@ public class PostRestController {
         CreatePostDto createPostDto = createPostRestRequest.toCreatePostDto();
 
         postService.createPost(createPostDto);
+
+        return postRestPresentor.getPostResponse();
+    }
+
+    @GetMapping("/{postId}")
+    public PostRestDto getPost(@PathVariable long postId) {
+        PostRepository postRepository = new MemRepository();
+
+        PostRestPresentor postRestPresentor = new PostRestPresentor();
+
+        PostService postService = new PostServiceImpl(
+            postRepository,
+            postRestPresentor
+        );
+
+        postService.getPostById(postId);
 
         return postRestPresentor.getPostResponse();
     }

@@ -2,6 +2,8 @@ package com.my_blog.demo.post.application;
 
 import java.util.*;
 
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+
 import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.application.dto.GetPostsIndexRequest;
 import com.my_blog.demo.post.application.dto.PostDto;
@@ -10,6 +12,7 @@ import com.my_blog.demo.post.application.outbound_ports.PostPresentor;
 import com.my_blog.demo.post.application.outbound_ports.PostRepository;
 import com.my_blog.demo.post.domain.Post;
 import com.my_blog.demo.post.domain.value_objects.PostContent;
+import com.my_blog.demo.post.domain.value_objects.PostId;
 import com.my_blog.demo.post.domain.value_objects.PostTitle;
 
 public class PostServiceImpl implements PostService {
@@ -77,9 +80,19 @@ public class PostServiceImpl implements PostService {
 
 
     public void getPostById(long postId) {
+        PostId postIdVO = new PostId(postId);
 
+        Post post = postsPersistency.find(postIdVO)
+            .orElseThrow(() -> new ResourceNotFoundException());
 
-        postPresentor.show(new PostDto());
+        PostDto postDto = PostDto.builder()
+            .id(post.getPostId().getPostId())
+            .title(post.getTitle().getTitle())
+            .content(post.getContent().getContent())
+            .authorId(post.getAuthorId())
+            .build();
+
+        postPresentor.show(postDto);
     }
 
 
