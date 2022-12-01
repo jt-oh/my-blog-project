@@ -8,6 +8,6 @@ public interface PostService {
     public void createPost(CreatePostDto createPostDto);
     public void getPostsIndex(GetPostsIndexRequest getPostsIndexRequest);
     public void getPostById(long postId);
-    public void updatePost(UpdatePostDto updatePostDto);
+    public void updatePost(long postId, UpdatePostDto updatePostDto);
     public long deletePostById(long postId);
 }

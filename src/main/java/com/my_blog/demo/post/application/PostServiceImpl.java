@@ -96,7 +96,7 @@ public class PostServiceImpl implements PostService {
     }
 
 
-    public void updatePost(UpdatePostDto updatePostDto) {
+    public void updatePost(long postId, UpdatePostDto updatePostDto) {
 
         postPresentor.show(new PostDto());
     }
