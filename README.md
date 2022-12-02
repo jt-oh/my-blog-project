@@ -151,3 +151,41 @@ This project only contains server-side APIs.
     - content
 
 1. DELETE '/api/v1/comments/{comments_id}'
+
+## Trouble Shooting
+
+### Dependency Injection with property Autowiring does not work
+
+``` java
+public class PostRestController {
+    @Autowired
+    private PostRestPresentor postRestPresentor;
+    
+    // ...
+
+    public PostRestController() {
+        PostRepository postRepository = new MemRepository();
+        postService = new PostServiceImpl(postRepository, postRestPresentor);
+    }
+}
+```
+
+`postRestPresentor` was null so that PostService throws NullPointerException.
+I assumed that @Autowired annotations on instance property works with no-args-constructor.
+And because I implemented the constructor, spring cannot use no-args-constructor.
+
+I decided to use Constructor Dependency Injection and finally it works.
+Below is a fixed code.
+
+``` java
+public class PostRestController {
+    // ...
+
+    @Autowired
+    public PostRestController(PostRestPresentor postRestPresentor) {
+        PostRepository postRepository = new MemRepository();
+        
+        postService = new PostServiceImpl(postRepository, postRestPresentor);
+    }
+}
+```
