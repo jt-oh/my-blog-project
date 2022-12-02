@@ -4,6 +4,7 @@ import java.util.List;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,18 +29,19 @@ import com.my_blog.demo.post.persistency.MemRepository;
 @RestController
 @RequestMapping(path="/api/v1/posts")
 public class PostRestController {
+    private PostRestPresentor postRestPresentor;
+    private PostService postService;
+
+    @Autowired
+    public PostRestController(PostRestPresentor postRestPresentor) {
+        PostRepository postRepository = new MemRepository();
+        this.postRestPresentor = postRestPresentor;
+        
+        postService = new PostServiceImpl(postRepository, this.postRestPresentor);
+    }
 
     @PostMapping
     public PostRestDto createPost(@RequestBody CreatePostRestRequest createPostRestRequest) {
-        PostRepository postRepository = new MemRepository();
-
-        PostRestPresentor postRestPresentor = new PostRestPresentor();
-
-        PostService postService = new PostServiceImpl(
-            postRepository,
-            postRestPresentor
-        );
-
         CreatePostDto createPostDto = createPostRestRequest.toCreatePostDto();
 
         postService.createPost(createPostDto);
@@ -49,15 +51,6 @@ public class PostRestController {
 
     @GetMapping("/{postId}")
     public PostRestDto getPost(@PathVariable long postId) {
-        PostRepository postRepository = new MemRepository();
-
-        PostRestPresentor postRestPresentor = new PostRestPresentor();
-
-        PostService postService = new PostServiceImpl(
-            postRepository,
-            postRestPresentor
-        );
-
         postService.getPostById(postId);
 
         return postRestPresentor.getPostResponse();
@@ -69,15 +62,6 @@ public class PostRestController {
         @RequestParam("page_index") Optional<Integer> pageIndex,
         @RequestParam("search_by") Optional<String> searchBy
     ) {
-        PostRepository postRepository = new MemRepository();
-
-        PostRestPresentor postRestPresentor = new PostRestPresentor();
-
-        PostService postService = new PostServiceImpl(
-            postRepository,
-            postRestPresentor
-        );
-
         GetPostsIndexRequest getPostsIndexRequest = GetPostsIndexRequest.builder()
             .pageSize(pageSize.orElse(30))
             .pageIndex(pageIndex.orElse(1))
@@ -91,15 +75,6 @@ public class PostRestController {
 
     @PutMapping("/{postId}")
     public PostRestDto updatePost(@PathVariable long postId, @RequestBody UpdatePostRestRequest updatePostRestRequest) {
-        PostRepository postRepository = new MemRepository();
-
-        PostRestPresentor postRestPresentor = new PostRestPresentor();
-
-        PostService postService = new PostServiceImpl(
-            postRepository,
-            postRestPresentor
-        );
-
         UpdatePostDto createPostDto = updatePostRestRequest.toUpdatePostDto();
 
         postService.updatePost(postId, createPostDto);
@@ -109,15 +84,6 @@ public class PostRestController {
 
     @DeleteMapping("/{postId}")
     public long deletePost(@PathVariable long postId) {
-        PostRepository postRepository = new MemRepository();
-
-        PostRestPresentor postRestPresentor = new PostRestPresentor();
-
-        PostService postService = new PostServiceImpl(
-            postRepository,
-            postRestPresentor
-        );
-
         return postService.deletePostById(postId);
     }
 }

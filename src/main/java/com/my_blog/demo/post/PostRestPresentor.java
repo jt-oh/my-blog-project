@@ -2,10 +2,13 @@ package com.my_blog.demo.post;
 
 import java.util.*;
 
+import org.springframework.stereotype.Component;
+
 import com.my_blog.demo.post.application.dto.PostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostPresentor;
 import com.my_blog.demo.post.dto.PostRestDto;
 
+@Component
 public class PostRestPresentor implements PostPresentor {
     private PostRestDto postResponse;
     private List<PostRestDto> postsResponse;
