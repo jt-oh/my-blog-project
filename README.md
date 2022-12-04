@@ -175,6 +175,7 @@ I assumed that @Autowired annotations on instance property works with no-args-co
 And because I implemented the constructor, spring cannot use no-args-constructor.
 
 I decided to use Constructor Dependency Injection and finally it works.
+
 Below is a fixed code.
 
 ``` java
