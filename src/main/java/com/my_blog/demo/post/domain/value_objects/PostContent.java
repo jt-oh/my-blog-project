@@ -11,4 +11,8 @@ public class PostContent {
     public PostContent(PostContent content) {
         this.content = content.getContent();
     }
+
+    public boolean contains(String keyword) {
+        return content.contains(keyword);
+    }
 }

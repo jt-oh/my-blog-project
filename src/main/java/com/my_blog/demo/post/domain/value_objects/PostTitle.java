@@ -11,4 +11,8 @@ public class PostTitle {
     public PostTitle(PostTitle title) {
         this.title = title.getTitle();
     }
+
+    public boolean contains(String keyword) {
+        return title.contains(keyword);
+    }
 }

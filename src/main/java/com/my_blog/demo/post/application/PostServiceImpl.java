@@ -58,17 +58,16 @@ public class PostServiceImpl implements PostService {
     public void getPostsIndex(GetPostsIndexRequest getPostsIndexRequest) {
         List<Post> posts = postsPersistency.findAll();
 
-        List<PostDto> postDtos = new ArrayList<PostDto>();
-        for (Post post: posts) {
-            PostDto postDto = PostDto.builder()
-                .id(post.getPostId().getPostId())
-                .title(post.getTitle().getTitle())
-                .content(post.getContent().getContent())
-                .authorId(post.getAuthorId())
-                .build();
+        String keyword = getPostsIndexRequest.getSearchBy();
+        int pageSize = getPostsIndexRequest.getPageSize();
+        int skip = (getPostsIndexRequest.getPageIndex() - 1) * pageSize;
 
-            postDtos.add(postDto);
-        }
+        List<PostDto> postDtos = posts.stream()
+            .filter(post -> post.getTitle().contains(keyword) || post.getContent().contains(keyword))
+            .skip(skip)
+            .limit(pageSize)
+            .map(post -> new PostDto(post))
+            .toList();
 
         postPresentor.show(postDtos);
     }
