@@ -10,7 +10,7 @@ import com.my_blog.demo.post.domain.value_objects.PostId;
 public class MemRepository implements PostRepository {
     public static List<Post> memStore = new ArrayList<Post> ();
     private static AtomicLong counter = new AtomicLong();
-
+    private static PostComparatorById postComparatorById = new PostComparatorById();
 
     public Post save(Post post) {
         Post newPost = new Post(post);
@@ -61,6 +61,26 @@ public class MemRepository implements PostRepository {
             posts.add(new Post(post));
         }
 
+        posts.sort(postComparatorById);
+
         return posts;
+    }
+}
+
+class PostComparatorById implements Comparator<Post> {
+    @Override
+    public int compare(Post o1, Post o2) {        
+        long post1Id = o1.getPostId().getPostId();
+        long post2Id = o2.getPostId().getPostId();
+
+        if (post1Id > post2Id) {
+            return 1;
+        }
+
+        if (post1Id < post2Id) {
+            return -1;
+        }
+
+        return 0;
     }
 }
