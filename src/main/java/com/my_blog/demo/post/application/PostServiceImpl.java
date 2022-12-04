@@ -56,6 +56,7 @@ public class PostServiceImpl implements PostService {
 
 
     public void getPostsIndex(GetPostsIndexRequest getPostsIndexRequest) {
+        // ToDo: minimize memory usage by delegating post filters to persistency.
         List<Post> posts = postsPersistency.findAll();
 
         String keyword = getPostsIndexRequest.getSearchBy();
@@ -88,6 +89,7 @@ public class PostServiceImpl implements PostService {
     public void updatePost(long postId, UpdatePostDto updatePostDto) {
         PostId postIdVO = new PostId(postId);
 
+        // make independent core business logic from User Interface(Rest API) by removing ResourceNotFoundException()
         Post existPost = postsPersistency.find(postIdVO)
             .orElseThrow(() -> new ResourceNotFoundException());
 
