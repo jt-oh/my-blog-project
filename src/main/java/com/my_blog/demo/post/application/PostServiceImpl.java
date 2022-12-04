@@ -63,7 +63,7 @@ public class PostServiceImpl implements PostService {
         int skip = (getPostsIndexRequest.getPageIndex() - 1) * pageSize;
 
         List<PostDto> postDtos = posts.stream()
-            .filter(post -> post.getTitle().contains(keyword) || post.getContent().contains(keyword))
+            .filter(post -> post.containsKeyword(keyword))
             .skip(skip)
             .limit(pageSize)
             .map(post -> new PostDto(post))

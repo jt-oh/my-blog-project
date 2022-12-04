@@ -27,4 +27,8 @@ public class Post {
         content = new PostContent(post.getContent());
         authorId = post.getAuthorId();
     }
+
+    public boolean containsKeyword(String keyword) {
+        return title.contains(keyword) || content.contains(keyword);
+    }
 }
