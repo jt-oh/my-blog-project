@@ -49,12 +49,7 @@ public class PostServiceImpl implements PostService {
 
         post = postsPersistency.save(post);
 
-        PostDto postDto = PostDto.builder()
-            .id(post.getPostId().getPostId())
-            .title(post.getTitle().getTitle())
-            .content(post.getContent().getContent())
-            .authorId(post.getAuthorId())
-            .build();
+        PostDto postDto = new PostDto(post);
 
         postPresentor.show(postDto);
     }
@@ -85,12 +80,7 @@ public class PostServiceImpl implements PostService {
         Post post = postsPersistency.find(postIdVO)
             .orElseThrow(() -> new ResourceNotFoundException());
 
-        PostDto postDto = PostDto.builder()
-            .id(post.getPostId().getPostId())
-            .title(post.getTitle().getTitle())
-            .content(post.getContent().getContent())
-            .authorId(post.getAuthorId())
-            .build();
+        PostDto postDto = new PostDto(post);
 
         postPresentor.show(postDto);
     }
@@ -110,12 +100,7 @@ public class PostServiceImpl implements PostService {
 
         Post updatedPost = postsPersistency.save(existPost);
 
-        PostDto postDto = PostDto.builder()
-            .id(updatedPost.getPostId().getPostId())
-            .title(updatedPost.getTitle().getTitle())
-            .content(updatedPost.getContent().getContent())
-            .authorId(updatedPost.getAuthorId())
-            .build();
+        PostDto postDto = new PostDto(updatedPost);
 
         postPresentor.show(postDto);
     }
