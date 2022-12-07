@@ -22,7 +22,11 @@ public class Post {
     private long authorId;
 
     public Post(Post post) {
-        postId = new PostId(post.getPostId());
+        PostId postId = post.getPostId();
+        if (postId != null) {
+            this.postId = new PostId(postId);
+        }
+
         title = new PostTitle(post.getTitle());
         content = new PostContent(post.getContent());
         authorId = post.getAuthorId();

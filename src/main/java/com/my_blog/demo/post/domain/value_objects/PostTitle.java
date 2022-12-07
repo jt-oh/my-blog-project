@@ -8,8 +8,12 @@ import lombok.Getter;
 public class PostTitle {
     private String title;
 
-    public PostTitle(PostTitle title) {
-        this.title = title.getTitle();
+    public PostTitle(PostTitle postTitle) {
+        if (postTitle == null) {
+            throw new RuntimeException("Given PostTitle is null");
+        }
+
+        title = postTitle.getTitle();
     }
 
     public boolean contains(String keyword) {

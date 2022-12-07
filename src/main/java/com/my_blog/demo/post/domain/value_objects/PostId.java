@@ -9,9 +9,11 @@ public class PostId {
     private long postId;
 
     public PostId(PostId postId) {
-        if (postId != null) {
-            this.postId = postId.getPostId();
+        if (postId == null) {
+            throw new RuntimeException("PostId cannot represent null");
         }
+
+        this.postId = postId.getPostId();
     }
 
     @Override
