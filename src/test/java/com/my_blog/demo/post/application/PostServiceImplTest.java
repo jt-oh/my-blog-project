@@ -3,10 +3,12 @@ package com.my_blog.demo.post.application;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.my_blog.demo.post.application.dto.CreatePostDto;
 import com.my_blog.demo.post.application.dto.PostDto;
 import com.my_blog.demo.post.application.outbound_ports.PostPresentor;
 import com.my_blog.demo.post.application.outbound_ports.PostRepository;
@@ -61,6 +63,39 @@ public class PostServiceImplTest {
         assertTrue(retrievedPost.getTitle().equals(targetPost.getTitle().getTitle()));
         assertTrue(retrievedPost.getContent().equals(targetPost.getContent().getContent()));
         assertEquals(targetPost.getAuthorId(), retrievedPost.getAuthorId());
+    }
+
+    @Test
+    public void createPostTest() {
+        String[] titles = {"First Title", "Second Title", "Th title", "F title", "5 Title"};
+        String[] contents = {"1 content", "2nd Content", "thr content", "4 Content", "fi content"};
+        long authorId = 990227L;
+
+        List<PostDto> createPostResponses = new ArrayList<PostDto>();
+        for (int i = 0; i < 5; i++) {
+            CreatePostDto createPostRequest = CreatePostDto.builder()
+                .title(titles[i])
+                .content(contents[i])
+                .authorId(authorId)
+                .build();
+
+            postService.createPost(createPostRequest);
+
+            createPostResponses.add(testPostPresentor.getPostResponse());
+        }
+
+        List<Post> createdPosts = MemRepository.memStore;
+
+        createPostResponses.forEach(postDto -> {
+            Post createdPost = createdPosts.stream()
+                .filter(post -> post.getPostId().getPostId() == postDto.getId())
+                .findFirst()
+                .orElse(null);
+
+            assertTrue(createdPost.getTitle().getTitle().equals(postDto.getTitle()));
+            assertTrue(createdPost.getContent().getContent().equals(postDto.getContent()));
+            assertEquals(authorId, createdPost.getAuthorId());
+        });
     }
 
     private class TestPostPresentor implements PostPresentor{
