@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder()
             .title(new PostTitle(createPostDto.getTitle()))
             .content(new PostContent(createPostDto.getContent()))
-            .authorId(1L)
+            .authorId(createPostDto.getAuthorId())
             .build();
 
         post = postsPersistency.save(post);
